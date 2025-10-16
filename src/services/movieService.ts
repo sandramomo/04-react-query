@@ -3,7 +3,8 @@ import type { Movie } from "../types/movie";
 
 
 interface MoviesHttpResponse {
-  results: Movie[];
+  results: Movie[],
+  total_pages: number,
 }
 
 const myKey = import.meta.env.VITE_API_KEY;
@@ -17,13 +18,12 @@ const axios = Axios.create({
   params: {
     include_adult: false,
     language: "en-US",
-    page: 1,
   },
 });
 
-export function getMoviesByQuery(query: string): Promise<MoviesHttpResponse>
- {
+export function getMoviesByQuery(query: string, page: number): Promise<MoviesHttpResponse>
+{
   return axios
-    .get<MoviesHttpResponse>("search/movie" , { params: { query } })
+    .get<MoviesHttpResponse>("search/movie" , { params: { query, page } })
     .then((res) => res.data);
 }
